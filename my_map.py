@@ -14,36 +14,29 @@ class MyAPP(Ui_MainWindow, QMainWindow):
         self.pushButton.clicked.connect(self.cmd1)
 
     def cmd1(self):
-        try:
-            toponym_to_find = self.lineEdit.text()
-            geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
-            geocoder_params = {
-                "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
-                "geocode": toponym_to_find,
-                "format": "json"}
-            response = requests.get(geocoder_api_server, params=geocoder_params)
-            if not response:
-                pass
-            json_response = response.json()
-            if json_response["response"]["GeoObjectCollection"]["featureMember"]:
-                toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
-            else:
-                q = 100 / 0
-            toponym_coodrinates = toponym["Point"]["pos"]
-            toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
-            delta = self.lineEdit_2.text()
-            if float(delta):
-                map_params = {
-                    "ll": ",".join([toponym_longitude, toponym_lattitude]),
-                    "spn": ",".join([delta, delta]),
-                    "l": "map"
-                }
-                map_api_server = "http://static-maps.yandex.ru/1.x/"
-                response = requests.get(map_api_server, params=map_params)
-                self.img = ImageQt.ImageQt(Image.open(BytesIO(response.content)))
-                self.label.setPixmap(QPixmap.fromImage(self.img))
-        except:
-            print("ERROR")
+        toponym_to_find = self.lineEdit.text()
+        geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
+        geocoder_params = {
+            "apikey": "40d1649f-0493-4b70-98ba-98533de7710b",
+            "geocode": toponym_to_find,
+            "format": "json"}
+        response = requests.get(geocoder_api_server, params=geocoder_params)
+        if not response:
+            pass
+        json_response = response.json()
+        toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
+        toponym_coodrinates = toponym["Point"]["pos"]
+        toponym_longitude, toponym_lattitude = toponym_coodrinates.split(" ")
+        delta = self.lineEdit_2.text()
+        map_params = {
+            "ll": ",".join([toponym_longitude, toponym_lattitude]),
+            "spn": ",".join([delta, delta]),
+            "l": "map"
+        }
+        map_api_server = "http://static-maps.yandex.ru/1.x/"
+        response = requests.get(map_api_server, params=map_params)
+        self.img = ImageQt.ImageQt(Image.open(BytesIO(response.content)))
+        self.label.setPixmap(QPixmap.fromImage(self.img))
 
 
 if __name__ == "__main__":
