@@ -27,7 +27,6 @@ class MyAPP(Ui_MainWindow, QMainWindow):
             pass
         json_response = response.json()
         toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
-        print(toponym)
         toponym_coodrinates = toponym["Point"]["pos"]
         self.toponym_longitude, self.toponym_lattitude = toponym_coodrinates.split(" ")
         self.cmd2(0)
