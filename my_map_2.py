@@ -52,10 +52,8 @@ class MyAPP(Ui_MainWindow, QMainWindow):
 
     def keyPressEvent(self, event):
         if event.key() == Qt.Key_PageUp:
-            print('!')
             self.cmd2(1)
         if event.key() == Qt.Key_PageDown:
-            print('!!')
             self.cmd2(-1)
 
 
